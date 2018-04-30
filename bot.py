@@ -128,7 +128,6 @@ async def run_code(ctx, *, text: str):
                         content += f'```{donnees["Stats"]}```'
                     if not content:
                         content = "```No output```"
-                    print(content)
                     await ctx.send(content)
                 else:
                     await ctx.send(f"An error occurred, code {response.status}\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
