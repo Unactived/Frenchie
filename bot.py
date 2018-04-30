@@ -152,4 +152,4 @@ do not star this repository, you finish eaten by a baguette", color=BLUE)
 async def kill(ctx):
     await bot.logout()
 
-bot.run(BOT_TOKEN)
+bot.run('BOT_TOKEN')
