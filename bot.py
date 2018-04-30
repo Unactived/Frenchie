@@ -25,7 +25,7 @@ bot = commands.Bot(command_prefix=prefix, description=description, pm_help=None)
 async def on_ready():
     print(f'Logged in as {bot.user.name} ; ID : {bot.user.id}')
     print('-----------------------------------------------\n')
-    await bot.change_presence(status=3, activity=discord.Game(name='{prefix}info | {prefix}help'))
+    await bot.change_presence(status=3, activity=discord.Game(name=f'{prefix}info | {prefix}help'))
 
 @bot.command()
 async def info(ctx):
