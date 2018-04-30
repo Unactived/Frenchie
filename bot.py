@@ -2,14 +2,17 @@ import discord
 from discord.ext import commands
 import aiohttp, urllib.parse
 from datetime import datetime
+import os
 
 from config import *
 from checks import *
 
 try:
+    # Development
     from private import *
 except ImportError:
-    pass # Development token
+    # Deployment
+    BOT_TOKEN = os.environ['BOT_TOKEN']
 
 description = """
 FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
@@ -152,4 +155,4 @@ do not star this repository, you finish eaten by a baguette", color=BLUE)
 async def kill(ctx):
     await bot.logout()
 
-bot.run('BOT_TOKEN')
+bot.run(BOT_TOKEN)
