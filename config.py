@@ -2,6 +2,8 @@
 BLUE = 0x99e6ff
 prefix = 'fr!'
 
+import os
+
 try:
     # Development
     from private import *
