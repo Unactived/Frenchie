@@ -6,11 +6,17 @@ from datetime import datetime
 from config import *
 from checks import *
 
+try:
+    from private import *
+except ImportError:
+    pass # Devlopment token
+
 description = """
-FrenchMasterSword's bot, provides some cool utilities (just to be sure, it's French)
+FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
+ it's French, and still in development)
 """
 
-bot = commands.Bot(command_prefix='.', description=description, pm_help=None)
+bot = commands.Bot(command_prefix=prefix, description=description, pm_help=None)
 
 @bot.event
 async def on_ready():
@@ -25,7 +31,8 @@ async def info(ctx):
 
     embed.add_field(name="Author", value="FrenchMasterSword#9035")
     embed.add_field(name="Server count", value=f"{len(bot.guilds)}")
-    embed.add_field(name="Invite", value="[Invite me to your server ! (not yet)](https://google.com)")
+    embed.add_field(name="Invite", value=f"[Invite me to your server !]({invite_url})")
+    embed.add_field(name="Bug report", value=f"[Please open an issue]({invite_url}/issues)")
     embed.set_footer(text="Coded with ❤ and Python 3")
 
     await ctx.send(embed=embed)
@@ -36,7 +43,7 @@ async def ping(ctx):
     latency = round(bot.latency * 1000, 2)
     await ctx.send(f':ping_pong: **Pong !** Latency : `{latency} ms`')
 
-@bot.command()
+@bot.command(usage="<location>,[<country code>]")
 async def weather(ctx, location):
     """Gives you current weather stuff on a given city"""
     async with ctx.typing():
@@ -68,13 +75,12 @@ async def weather(ctx, location):
                 else:
                     await ctx.send(f"An error occurred, code : {response.status}. Check your arguments.")
 
-@bot.command(name="run", hidden=True)
+@bot.command(name="run", usage="<language>|[\`\`\`][<language>\n]<code>][\`\`\`]", hidden=True)
 async def run_code(ctx, *, text: str):
     """Run code and feedback Output, warnings, errors and performance in more than 40 languages."""
     arg = text.split('|')
     language = arg[0].capitalize()
     code = arg[1][3:-3]
-
     #code markdown, C++ and C#/F#
     if code.startswith(arg[0]+'\n'):
         code = code[len(arg[0])+1:]
@@ -99,7 +105,6 @@ async def run_code(ctx, *, text: str):
             async with client_session.get(rexUrlRequest) as response:
                 if response.status == 200:
                     donnees = await response.json()
-
                     content = ""
                     if donnees['Result']:
                         content += f'```{donnees["Result"]}```'
@@ -120,6 +125,7 @@ async def run_code(ctx, *, text: str):
                         content += f'```{donnees["Stats"]}```'
                     if not content:
                         content = "```No output```"
+                    print(content)
                     await ctx.send(content)
                 else:
                     await ctx.send(f"An error occurred, code {response.status}\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
@@ -133,7 +139,15 @@ async def play(ctx, media='.info | .help'):
     activity = discord.Activity(name=media, type=p_types[ctx.invoked_with])
     await bot.change_presence(activity=activity)
 
-@bot.command(usage="<location>,[<country code>]", hidden=True)
+@bot.command(aliases=['source'])
+async def sourcecode(ctx):
+    """Grants you access to a horrible code which strikes you blind"""
+    embed = discord.Embed(title="Frenchie", description="Legend tells that if you\
+do not star this repository, you finish eaten by a baguette", color=BLUE)
+    embed.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
+    embed.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
+
+@bot.command(hidden=True)
 @is_FMS()
 async def kill(ctx):
     await bot.logout()
