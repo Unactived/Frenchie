@@ -9,7 +9,7 @@ from checks import *
 try:
     from private import *
 except ImportError:
-    pass # Devlopment token
+    pass # Development token
 
 description = """
 FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
