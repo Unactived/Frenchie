@@ -93,35 +93,35 @@ async def run_code(ctx, *, text: str):
         rexUrlRequest += '&CompilerArgs=' + rexCompilerDict[language]
     #removing bad URL characters
     rexUrlRequest = urllib.parse.quote_plus(rexUrlRequest, safe=';/?:@&=$,><-[]')
+    async with ctx.typing():
+        async with aiohttp.ClientSession() as client_session:
+            async with client_session.get(rexUrlRequest) as response:
+                if response.status == 200:
+                    donnees = await response.json()
 
-    async with aiohttp.ClientSession() as client_session:
-        async with client_session.get(rexUrlRequest) as response:
-            if response.status == 200:
-                donnees = await response.json()
+                    content = ""
+                    if donnees['Result']:
+                        content += f'```{donnees["Result"]}```'
+                    if donnees['Warnings']:
+                        content += f'```fix\n{donnees["Warnings"]}```'
+                    if donnees['Errors']:
+                        # Red markdown
+                        listErrors = donnees['Errors'].split('\n')
+                        if len(listErrors) > 1:
+                            for line in listErrors:
+                                listErrors[listErrors.index(line)] = '-' + line
+                        else:
+                            listErrors[0] = '-' + listErrors[0]
+                        donnees['Errors'] = "diff\n" + "\n".join(listErrors)[:-1]
 
-                content = ""
-                if donnees['Result']:
-                    content += f'```{donnees["Result"]}```'
-                if donnees['Warnings']:
-                    content += f'```fix\n{donnees["Warnings"]}```'
-                if donnees['Errors']:
-                    # Red markdown
-                    listErrors = donnees['Errors'].split('\n')
-                    if len(listErrors) > 1:
-                        for line in listErrors:
-                            listErrors[listErrors.index(line)] = '-' + line
-                    else:
-                        listErrors[0] = '-' + listErrors[0]
-                    donnees['Errors'] = "diff\n" + "\n".join(listErrors)[:-1]
-
-                    content += f'```{donnees["Errors"]}```'
-                if donnees['Stats']:
-                    content += f'```{donnees["Stats"]}```'
-                if not content:
-                    content = "```No output```"
-                await ctx.send(content)
-            else:
-                await ctx.send("An error occurred\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
+                        content += f'```{donnees["Errors"]}```'
+                    if donnees['Stats']:
+                        content += f'```{donnees["Stats"]}```'
+                    if not content:
+                        content = "```No output```"
+                    await ctx.send(content)
+                else:
+                    await ctx.send(f"An error occurred, code {response.status}\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
 
 @bot.command(aliases=['stream', 'listen', 'watch'], hidden=True)
 @is_FMS()
