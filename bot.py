@@ -133,6 +133,15 @@ async def run_code(ctx, *, text: str):
                 else:
                     await ctx.send(f"An error occurred, code {response.status}\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
 
+@bot.command(aliases=['source'])
+async def sourcecode(ctx):
+    """Grants you access to a horrible code which strikes you blind"""
+    emb = discord.Embed(title="Frenchie", description="Legend tells that if you\
+ do not star this repository, you finish eaten by a baguette", color=BLUE)
+    emb.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
+    emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
+    await ctx.send(embed=emb)
+
 @bot.command()
 async def runlist(ctx):
     """Supported languages by the run command"""
@@ -149,13 +158,19 @@ async def play(ctx, media='.info | .help'):
     activity = discord.Activity(name=media, type=p_types[ctx.invoked_with])
     await bot.change_presence(activity=activity)
 
-@bot.command(aliases=['source'])
-async def sourcecode(ctx):
-    """Grants you access to a horrible code which strikes you blind"""
-    emb = discord.Embed(title="Frenchie", description="Legend tells that if you\
- do not star this repository, you finish eaten by a baguette", color=BLUE)
-    emb.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
-    emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
+@bot.command(hidden=True)
+@is_FMS()
+async def serverlist(ctx):
+    """Displays all guilds the bot is on, and an invite link if it's possible"""
+    emb = discord.Embed(title="Frenchie's server list", color=BLUE)
+    for guild in bot.guilds:
+        name = guild.name
+        try:
+            invite = await guild.text_channels[0].create_invite(unique=False)
+            invite = invite.code
+        except Exception as e:
+            invite = e
+        emb.add_field(name=name, value=f"[invite](https://discord.gg/{invite})")
     await ctx.send(embed=emb)
 
 @bot.command(hidden=True)

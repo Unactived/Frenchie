@@ -1,6 +1,14 @@
 # Private and sensitive informations
 BLUE = 0x99e6ff
 prefix = 'fr!'
+
+try:
+    # Development
+    from private import *
+except ImportError:
+    # Deployment
+    WEATHER_KEY = os.environ['WEATHER_KEY']
+
 # rextester
 rex_url = 'http://rextester.com/rundotnet/api?LanguageChoice={}&Program={}'
 rexLanguageDict = {'C#': 1, 'Vb.net': 2, 'F#': 3, 'Java': 4, 'Python2': 5, 'C': 6, 'C++': 7,
@@ -23,7 +31,7 @@ rexCompilerDict = {'C++': '-Wall -std=c++17 -O2 -o a.out source_file.cpp',
                    }
 
 # OpenWeatherMap
-weather_url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid=687dd4cd7e8ae7865edef573cc3ec9f2&units=metric'
+weather_url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid=' + WEATHER_KEY + '&units=metric'
 earth_url = "https://emojipedia-us.s3.amazonaws.com/thumbs/320/twitter/134/earth-globe-europe-africa_1f30d.png"
 
 # invite
