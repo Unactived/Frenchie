@@ -78,9 +78,9 @@ async def weather(ctx, location):
                 else:
                     await ctx.send(f"An error occurred, code : {response.status}. Check your arguments.")
 
-@bot.command(name="run", usage="<language>|[\`\`\`][<language>\n]<code>][\`\`\`]", hidden=True)
+@bot.command(name="run", usage="<language>|[\`\`\`][<language>\n]<code>][\`\`\`]")
 async def run_code(ctx, *, text: str):
-    """Run code and feedback Output, warnings, errors and performance in more than 40 languages."""
+    """Run code and feedback Output, warnings, errors and performance"""
     arg = text.split('|')
     language = arg[0].capitalize()
     code = arg[1][3:-3]
@@ -133,6 +133,13 @@ async def run_code(ctx, *, text: str):
                 else:
                     await ctx.send(f"An error occurred, code {response.status}\nCommand usage : `.run <language>|```<code>```[|INPUT=<input>][|<compiler args>]`")
 
+@bot.command()
+async def runlist(ctx):
+    """Supported languages by the run command"""
+    emb = discord.Embed(title="List of supported languages by run command",\
+    description="An exhaustive list is available [here](https://hastebin.com/pojukacafa.vbs)", color=BLUE)
+    await ctx.send(embed=emb)
+
 @bot.command(aliases=['stream', 'listen', 'watch'], hidden=True)
 @is_FMS()
 async def play(ctx, media='.info | .help'):
@@ -145,10 +152,11 @@ async def play(ctx, media='.info | .help'):
 @bot.command(aliases=['source'])
 async def sourcecode(ctx):
     """Grants you access to a horrible code which strikes you blind"""
-    embed = discord.Embed(title="Frenchie", description="Legend tells that if you\
-do not star this repository, you finish eaten by a baguette", color=BLUE)
-    embed.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
-    embed.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
+    emb = discord.Embed(title="Frenchie", description="Legend tells that if you\
+ do not star this repository, you finish eaten by a baguette", color=BLUE)
+    emb.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
+    emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
+    await ctx.send(embed=emb)
 
 @bot.command(hidden=True)
 @is_FMS()
