@@ -10,8 +10,8 @@ rexLanguageDict = {'C#': 1, 'Vb.net': 2, 'F#': 3, 'Java': 4, 'Python2': 5, 'C': 
 'Visual c': 29, 'D': 30, 'R': 31, 'Tcl': 32, 'Mysql': 33, 'Postgresql': 34, 'Oracle': 35, 'Swift': 37,
 'Bash': 38, 'Ada': 39, 'Erlang': 40, 'Elixir': 41, 'Ocaml': 42, 'Kotlin': 43, 'Brainfuck': 44, 'Fortran': 45}
 
-rexCompilerDict = {'C++': '-Wall -std=c++14 -O2 -o a.out source_file.cpp',
-                   'C++ clang': '-Wall -std=c++14 -stdlib=libc++ -O2 -o a.out source_file.cpp',
+rexCompilerDict = {'C++': '-Wall -std=c++17 -O2 -o a.out source_file.cpp',
+                   'C++ clang': '-Wall -std=c++17 -stdlib=libc++ -O2 -o a.out source_file.cpp',
                    'Visual c++': 'source_file.cpp -o a.exe /EHsc /MD /I C:\boost_1_60_0 /link /LIBPATH:C:\boost_1_60_0\stage\lib',
                    'C': '-Wall -std=gnu99 -O2 -o a.out source_file.c',
                    'C clang': '-Wall -std=gnu99 -O2 -o a.out source_file.c',
