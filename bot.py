@@ -150,7 +150,7 @@ async def runlist(ctx):
 
 @bot.command(aliases=['stream', 'listen', 'watch'], hidden=True)
 @is_FMS()
-async def play(ctx, media='.info | .help'):
+async def play(ctx, media=f'{prefix}info | {prefix}help'):
     """Update bot presence accordingly to invoke command"""
     # Need URL for streaming
     p_types = {'play': 0, 'stream':1, 'listen': 2, 'watch': 3}
