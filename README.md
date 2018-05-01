@@ -13,4 +13,7 @@ Execute (outside promise 😉) your code in more than 40 different languages, 42
 Come on, you already know what it does.
 
 **Feel free to ping me** on Discord : @FrenchMasterSword#9035
->I'd love to know how you managed to invite my bot or copy it
+
+### To come up
+
+Search on documentations such as StackOverflow, cppreference or python.org.
