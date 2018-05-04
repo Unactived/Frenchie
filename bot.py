@@ -3,23 +3,17 @@ from discord.ext import commands
 import aiohttp, urllib.parse
 from datetime import datetime
 import os
+import stackexchange
 
 from config import *
 from checks import *
-
-try:
-    # Development
-    from private import *
-except ImportError:
-    # Deployment
-    BOT_TOKEN = os.environ['BOT_TOKEN']
 
 description = """
 FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
  it's French, and still in development)
 """
 
-bot = commands.Bot(command_prefix=prefix, description=description, pm_help=None)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(prefix), description=description, pm_help=None)
 
 @bot.event
 async def on_ready():
@@ -147,6 +141,24 @@ async def runlist(ctx):
     emb = discord.Embed(title="List of supported languages by run command",\
     description="An exhaustive list is available [here](https://hastebin.com/pojukacafa.vbs)", color=BLUE)
     await ctx.send(embed=emb)
+
+@bot.group()
+async def ask(ctx):
+    """Searches on the given website"""
+    if ctx.invoked_subcommand is None:
+        await ctx.send(f'Usage : `{prefix}ask <site> "Arguments"`')
+
+@ask.command()
+async def StackOverflow(ctx, arg):
+    """Subcommand of group ask ; searches on StackOverflow"""
+
+    site = stackexchange.Site(eval(f"stackexchange.{ctx.invoked_with}"),
+    app_key=SE_KEY, impose_throttling=True)
+
+    qs = so.search(intitle=arg)
+
+
+########## ---------- OWNER-ONLY COMMANDS ---------- ##########
 
 @bot.command(aliases=['stream', 'listen', 'watch'], hidden=True)
 @is_FMS()

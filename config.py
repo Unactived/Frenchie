@@ -9,7 +9,9 @@ try:
     from private import *
 except ImportError:
     # Deployment
+    BOT_TOKEN = os.environ['BOT_TOKEN']
     WEATHER_KEY = os.environ['WEATHER_KEY']
+    SE_KEY = os.environ['SE_KEY']
 
 # rextester
 rex_url = 'http://rextester.com/rundotnet/api?LanguageChoice={}&Program={}'
