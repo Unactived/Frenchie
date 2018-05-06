@@ -4,7 +4,7 @@ from discord.ext import commands
 import aiohttp, urllib.parse
 from datetime import datetime
 import os
-import stackexchange
+import py-stackexchange
 
 from config import *
 from checks import *
