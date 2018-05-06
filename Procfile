@@ -1,1 +1,1 @@
-worker: python3 launcher.py
+worker: python launcher.py
