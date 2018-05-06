@@ -23,11 +23,11 @@ class Frenchie(commands.Bot):
         description=description, pm_help=None)
 
         for extension in extensions:
-            try:
-                self.load_extension(extension)
-            except Exception as e:
+            #try:
+            self.load_extension(extension)
+            #except Exception as e:
                 #print in error stream
-                print(f"Couldn't load the following extension : {extension} ; :{e}", file=sys.stderr)
+            print(f"Couldn't load the following extension : {extension} ; :{e}", file=sys.stderr)
 
     async def on_ready(self):
         print(f'Logged in as {self.user.name} ; ID : {self.user.id}')
