@@ -1,11 +1,12 @@
+import os
 import discord
 from discord.ext import commands
 
 import youtube_dl
 
+from checks import *
+
 youtube_dl.utils.bug_reports_message = lambda: ''
-
-
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -27,7 +28,6 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -55,17 +55,9 @@ class Music:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def join(self, ctx, *, channel: discord.VoiceChannel):
-        """Joins a voice channel"""
-
-        if ctx.voice_client is not None:
-            return await ctx.voice_client.move_to(channel)
-
-        await channel.connect()
-
-    @commands.command()
-    async def play(self, ctx, *, query):
+    @is_FMS()
+    @commands.command(hidden=True)
+    async def localplay(self, ctx, *, query):
         """Plays a file from the local filesystem"""
 
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
@@ -73,8 +65,9 @@ class Music:
 
         await ctx.send('Now playing: {}'.format(query))
 
-    @commands.command()
-    async def yt(self, ctx, *, url):
+    @is_FMS()
+    @commands.command(hidden=True)
+    async def download(self, ctx, *, url):
         """Plays from a url (almost anything youtube_dl supports)"""
 
         async with ctx.typing():
@@ -84,7 +77,7 @@ class Music:
         await ctx.send('Now playing: {}'.format(player.title))
 
     @commands.command()
-    async def stream(self, ctx, *, url):
+    async def play(self, ctx, *, url):
         """Streams from a url (same as yt, but doesn't predownload)"""
 
         async with ctx.typing():
@@ -93,7 +86,8 @@ class Music:
 
         await ctx.send('Now playing: {}'.format(player.title))
 
-    @commands.command()
+    @is_FMS()
+    @commands.command(hidden=True)
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
 
@@ -127,9 +121,9 @@ class Music:
 
         await ctx.voice_client.disconnect()
 
+    @localplay.before_invoke
+    @download.before_invoke
     @play.before_invoke
-    @yt.before_invoke
-    @stream.before_invoke
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
