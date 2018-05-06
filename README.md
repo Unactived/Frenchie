@@ -1,7 +1,5 @@
 # Frenchie
 
-![Stats widget](https://discordbots.org/api/widget/438242027541495808.svg)
-
 One bot to Frenchify all
 
 ## Run as much code as you want
