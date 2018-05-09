@@ -8,8 +8,11 @@ class Owner:
     def __init__(self, bot):
         self.bot = bot
 
+    # Owner check
+    async def __local_check(self, ctx):
+        return await self.bot.is_owner(ctx.author)
+
     @commands.command(aliases=['streaming', 'listening', 'watching'], hidden=True)
-    @is_FMS()
     async def playing(self, ctx, media=f'{prefix}info | {prefix}help'):
         """Update bot presence accordingly to invoke command"""
         # Need URL for streaming
@@ -19,7 +22,6 @@ class Owner:
         await self.bot.change_presence(activity=activity)
 
     @commands.command(hidden=True)
-    @is_FMS()
     async def guildlist(self, ctx):
         """Displays all guilds the bot is on and their members amount"""
         emb = discord.Embed(title="Frenchie's server list", color=BLUE)
@@ -30,7 +32,6 @@ class Owner:
         await ctx.send(embed=emb)
 
     @commands.command(hidden=True)
-    @is_FMS()
     async def guildinfo(self, ctx, guild: str):
         """Displays stuff on a given guild, and an invite if possible"""
         guild = discord.utils.get(self.bot.guilds, name=guild)
@@ -48,7 +49,6 @@ class Owner:
         await ctx.send(embed=emb)
 
     @commands.command(hidden=True)
-    @is_FMS()
     async def kill(self, ctx):
         await self.bot.logout()
 
