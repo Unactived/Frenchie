@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import traceback
 
 from config import *
 from checks import *
@@ -47,6 +48,37 @@ class Owner:
         emb.add_field(name="Invite",value=invite_link)
 
         await ctx.send(embed=emb)
+
+    @commands.command(hidden=True)
+    async def load(self, ctx, *, extension):
+        """Loads a cog"""
+        try:
+            self.bot.load_extension(extension)
+        except Exception as e:
+            await ctx.send(f'```py\n{traceback.format_exc()}\n```')
+        else:
+            await ctx.send('\N{SQUARED OK}')
+
+    @commands.command(hidden=True)
+    async def unload(self, ctx, *, extension):
+        """Unloads a cog"""
+        try:
+            self.bot.unload_extension(extension)
+        except Exception as e:
+            await ctx.send(f'```py\n{traceback.format_exc()}\n```')
+        else:
+            await ctx.send('\N{SQUARED OK}')
+
+    @commands.command(name='reload', hidden=True)
+    async def _reload(self, ctx, *, extension):
+        """Reloads a module."""
+        try:
+            self.bot.unload_extension(extension)
+            self.bot.load_extension(extension)
+        except Exception as e:
+            await ctx.send(f'```py\n{traceback.format_exc()}\n```')
+        else:
+            await ctx.send('\N{SQUARED OK}')
 
     @commands.command(hidden=True)
     async def kill(self, ctx):
