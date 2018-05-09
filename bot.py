@@ -12,9 +12,10 @@ FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
 """
 
 extensions = (
+    'cogs.admin',
     'cogs.general',
     'cogs.music',
-    'cogs.admin',
+    'cogs.owner',
 )
 
 class Frenchie(commands.Bot):

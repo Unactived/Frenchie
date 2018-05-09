@@ -157,39 +157,5 @@ it's French, and still in development)"""
 
         qs = so.search(intitle=arg)
 
-
-    ########## ---------- OWNER-ONLY COMMANDS ---------- ##########
-
-    @commands.command(aliases=['streaming', 'listening', 'watching'], hidden=True)
-    @is_FMS()
-    async def playing(self, ctx, media=f'{prefix}info | {prefix}help'):
-        """Update bot presence accordingly to invoke command"""
-        # Need URL for streaming
-        p_types = {'playing': 0, 'streaming':1, 'listening': 2, 'watching': 3}
-        activity = discord.Activity(name=media, type=p_types[ctx.invoked_with])
-
-        await self.bot.change_presence(activity=activity)
-
-    @commands.command(hidden=True)
-    @is_FMS()
-    async def serverlist(self, ctx):
-        """Displays all guilds the bot is on, and an invite link if it's possible"""
-        emb = discord.Embed(title="Frenchie's server list", color=BLUE)
-        for guild in self.bot.guilds:
-            name = guild.name
-            try:
-                invite = await guild.text_channels[0].create_invite(unique=False)
-                invite = invite.code
-            except Exception as e:
-                invite = e
-            emb.add_field(name=name, value=f"[invite](https://discord.gg/{invite})")
-
-        await ctx.send(embed=emb)
-
-    @commands.command(hidden=True)
-    @is_FMS()
-    async def kill(self, ctx):
-        await self.bot.logout()
-
 def setup(bot):
     bot.add_cog(General(bot))
