@@ -41,7 +41,6 @@ class Frenchie(commands.Bot):
 
     async def close(self):
         await super().close()
-        await self.session.close()
 
     def run(self, token):
         super().run(token, reconnect=True)
