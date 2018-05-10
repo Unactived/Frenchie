@@ -83,12 +83,14 @@ class Owner:
 
     @commands.command(hidden=True)
     async def kill(self, ctx):
+        "Kills process"
         await self.bot.logout()
 
     @commands.command(hidden=True)
-    async def commit(self, ctx):
+    async def commit(self, ctx, branch="master"):
+        "Kills process, then fetch and launch the given branch from Github"
         await self.bot.logout()
-        os.system('../redeploy.sh') # Reload Github and bot
+        os.system('../redeploy.sh {branch}') # Reload Github and bot
 
 def setup(bot):
     bot.add_cog(Owner(bot))
