@@ -148,6 +148,54 @@ it's French, and still in development)"""
 
             await ctx.send(f'Usage : `{prefix}ask <site> "Arguments"`')
 
+    @commands.command()
+    async def cpp(self, ctx, *, query: str):
+        """Search something on cppreference"""
+
+        url = 'http://en.cppreference.com/w/cpp/index.php'
+        params = {
+            'title': 'Special:Search',
+            'search': query
+        }
+
+        async with ctx.session.get(url, params=params) as resp:
+            if resp.status != 200:
+                return await ctx.send(f'An error occurred (status code: {resp.status}). Retry later.')
+
+            if len(resp.history) > 0:
+                return await ctx.send(resp.url)
+
+            e = discord.Embed()
+            root = etree.fromstring(await resp.text(), etree.HTMLParser())
+
+            nodes = root.findall(".//div[@class='mw-search-result-heading']/a")
+
+            description = []
+            special_pages = []
+            for node in nodes:
+                href = node.attrib['href']
+                if not href.startswith('/w/cpp'):
+                    continue
+
+                if href.startswith(('/w/cpp/language', '/w/cpp/concept')):
+                    # special page
+                    special_pages.append(f'[{node.text}](http://en.cppreference.com{href})')
+                else:
+                    description.append(f'[`{node.text}`](http://en.cppreference.com{href})')
+
+            if len(special_pages) > 0:
+                e.add_field(name='Language Results', value='\n'.join(special_pages), inline=False)
+                if len(description):
+                    e.add_field(name='Library Results', value='\n'.join(description[:10]), inline=False)
+            else:
+                if not len(description):
+                    return await ctx.send('No results found.')
+
+                e.title = 'Search Results'
+                e.description = '\n'.join(description[:15])
+
+            await ctx.send(embed=e)
+
     @ask.command()
     async def StackOverflow(self, ctx, arg):
         """Subcommand of group ask ; searches on StackOverflow"""
