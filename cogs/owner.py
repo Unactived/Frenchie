@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import traceback
+import os
 
 from config import *
 from checks import *
@@ -83,6 +84,11 @@ class Owner:
     @commands.command(hidden=True)
     async def kill(self, ctx):
         await self.bot.logout()
+
+    @commands.command(hidden=True)
+    async def commit(self, ctx):
+        await self.bot.logout()
+        os.system('../redeploy.sh') # Reload Github and bot
 
 def setup(bot):
     bot.add_cog(Owner(bot))
