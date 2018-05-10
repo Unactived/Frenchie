@@ -92,5 +92,9 @@ class Owner:
         await self.bot.logout()
         os.system(f'./redeploy.sh {branch}') # Reload Github and bot
 
+    @commands.command(hidden=True)
+    async def say(self, ctx, channel: discord.TextChannel, *, text: str):
+        await channel.send(text)
+
 def setup(bot):
     bot.add_cog(Owner(bot))
