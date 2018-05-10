@@ -90,6 +90,7 @@ class Owner:
     async def commit(self, ctx, branch="master"):
         "Kills process, then fetch and launch the given branch from Github"
         await self.bot.logout()
+        os.system('ls')
         os.system(f'../redeploy.sh {branch}') # Reload Github and bot
 
 def setup(bot):
