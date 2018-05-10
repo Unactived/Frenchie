@@ -205,5 +205,15 @@ it's French, and still in development)"""
 
         qs = so.search(intitle=arg)
 
+    @commands.command()
+    async def lmgtfy(self, ctx, *, text: str):
+        """Teaches you Internet"""
+
+        url = f"http://lmgtfy.com/?q={text}"
+        url = urllib.parse.quote_plus(url, safe=';/?:@&=$,><-[]')
+        emb = discord.Embed(title="How it works", description=f"[{text}](url)", color=BLUE)
+
+        await ctx.send(embed=emb)
+
 def setup(bot):
     bot.add_cog(General(bot))
