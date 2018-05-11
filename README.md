@@ -19,3 +19,7 @@ Come on, you already know what it does.
 ### To come up
 
 Search on documentations such as StackOverflow, cppreference or python.org.
+
+### Invite me to your server
+
+[Just a click](https://discordapp.com/oauth2/authorize?client_id=438242027541495808&scope=bot&permissions=1194839233 "Come on, you can do it")

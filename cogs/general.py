@@ -24,7 +24,7 @@ it's French, and still in development)"""
 
         embed.add_field(name="Author", value="FrenchMasterSword#9035")
         embed.add_field(name="Server count", value=f"{len(self.bot.guilds)}")
-        embed.add_field(name="Invite", value=f"[Invite me to your server !]({invite_url})")
+        embed.add_field(name="Invite", value=f'[Invite me to your server !]({invite_url} "What are you waiting for ?")')
         embed.add_field(name="Bug report", value=f"[Please open an issue]({invite_url}/issues)")
         embed.set_footer(text="Coded with ❤ and Python 3")
 
@@ -128,7 +128,7 @@ it's French, and still in development)"""
         """Grants you access to a horrible code which strikes you blind"""
         emb = discord.Embed(title="Frenchie", description="Legend tells that if you\
  do not star this repository, you finish eaten by a baguette", color=BLUE)
-        emb.add_field(name="Beware", value=f"[Source code (Github)]({source_url})")
+        emb.add_field(name="Beware", value=f'[Source code (Github)]({source_url} "⭐?")')
         emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
 
         await ctx.send(embed=emb)
