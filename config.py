@@ -22,7 +22,7 @@ rexLanguageDict = {'C#': 1, 'Vb.net': 2, 'F#': 3, 'Java': 4, 'Python2': 5, 'C': 
 'Sql server': 16, 'Javascript': 17, 'Lisp': 18, 'Prolog': 19, 'Go': 20, 'Scala': 21, 'Scheme': 22,
 'Node.js': 23, 'Python': 24, 'Octave': 25, 'C clang': 26, 'C++ clang': 27, 'Visual c++': 28,
 'Visual c': 29, 'D': 30, 'R': 31, 'Tcl': 32, 'Mysql': 33, 'Postgresql': 34, 'Oracle': 35, 'Swift': 37,
-'Bash': 38, 'Ada': 39, 'Erlang': 40, 'Elixir': 41, 'Ocaml': 42, 'Kotlin': 43, 'Brainfuck': 44, 'Fortran': 45}
+'Bash': 38, 'Ada': 39, 'Erlang': 40, 'Elixir': 41, 'Ocaml': 42, 'Kotlin': 43, 'Brainfuck': 44, 'Bf': 44, 'Fortran': 45}
 
 rexCompilerDict = {'C++': '-Wall -std=c++17 -O2 -o a.out source_file.cpp',
                    'C++ clang': '-Wall -std=c++17 -stdlib=libc++ -O2 -o a.out source_file.cpp',
