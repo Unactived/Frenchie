@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import traceback
 import os
+import sys, io
 
 from config import *
 from checks import *
@@ -83,18 +84,44 @@ class Owner:
 
     @commands.command(hidden=True)
     async def kill(self, ctx):
-        "Kills process"
+        """Kills process"""
         await self.bot.logout()
 
     @commands.command(hidden=True)
     async def commit(self, ctx, branch="master"):
-        "Kills process, then fetch and launch the given branch from Github"
+        """Kills process, then fetch and launch the given branch from Github"""
         await self.bot.logout()
         os.system(f'./redeploy.sh {branch}') # Reload Github and bot
 
+    @commands.check(guild_only)
     @commands.command(hidden=True)
     async def say(self, ctx, channel: discord.TextChannel, *, text: str):
+        """Makes the bot say something in a given current guild's channel"""
         await channel.send(text)
+
+    @is_FMS()
+    @commands.command(name='eval', hidden=True)
+    async def _eval(self, ctx, *, text: str):
+        """Eval some code"""
+        await ctx.send(f"```python\n{eval(text)}```")
+
+    @is_FMS()
+    @commands.command(name='exec', hidden=True)
+    async def _exec(self, ctx, *, text: str):
+        """Exec some code, used a string instead of a file"""
+
+        old_stdout = sys.stdout
+        buffer = io.StringIO()
+        sys.stdout = buffer
+        try:
+            exec(text)
+            buffer.seek(0)
+            await ctx.send(f"```python\n{buffer.read()}```")
+        except Exception as e:
+            await ctx.send(f"```python\n{e}```")
+        finally:
+            sys.stdout = old_stdout
+            del buffer        
 
 def setup(bot):
     bot.add_cog(Owner(bot))
