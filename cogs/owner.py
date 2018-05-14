@@ -93,19 +93,19 @@ class Owner:
         await self.bot.logout()
         os.system(f'./redeploy.sh {branch}') # Reload Github and bot
 
-    @commands.check(guild_only)
+    @commands.guild_only()
     @commands.command(hidden=True)
     async def say(self, ctx, channel: discord.TextChannel, *, text: str):
         """Makes the bot say something in a given current guild's channel"""
         await channel.send(text)
 
-    @is_FMS()
+    @commands.is_owner()
     @commands.command(name='eval', hidden=True)
     async def _eval(self, ctx, *, text: str):
         """Eval some code"""
         await ctx.send(f"```python\n{eval(text)}```")
 
-    @is_FMS()
+    @commands.is_owner()
     @commands.command(name='exec', hidden=True)
     async def _exec(self, ctx, *, text: str):
         """Exec some code, used a string instead of a file"""
@@ -121,7 +121,7 @@ class Owner:
             await ctx.send(f"```python\n{e}```")
         finally:
             sys.stdout = old_stdout
-            del buffer        
+            del buffer
 
 def setup(bot):
     bot.add_cog(Owner(bot))

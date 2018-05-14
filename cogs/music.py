@@ -55,7 +55,7 @@ class Music:
     def __init__(self, bot):
         self.bot = bot
 
-    @is_FMS()
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def localplay(self, ctx, *, query):
         """Plays a file from the local filesystem"""
@@ -65,7 +65,7 @@ class Music:
 
         await ctx.send('Now playing: {}'.format(query))
 
-    @is_FMS()
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def download(self, ctx, *, url):
         """Plays from a url (almost anything youtube_dl supports)"""
@@ -86,7 +86,7 @@ class Music:
 
         await ctx.send('Now playing: {}'.format(player.title))
 
-    @is_FMS()
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def volume(self, ctx, volume: int):
         """Changes the player's volume"""
