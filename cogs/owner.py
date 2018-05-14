@@ -3,6 +3,7 @@ from discord.ext import commands
 import traceback
 import os
 import sys, io
+import sqlite3
 
 from config import *
 from checks import *
@@ -122,6 +123,29 @@ class Owner:
         finally:
             sys.stdout = old_stdout
             del buffer
+
+    @commands.is_owner()
+    @commands.command(name='sql', hidden=True)
+    async def _sql(self, ctx, *, sql: str):
+        """Runs SQL"""
+        con = sqlite3.connect("database.db")
+        # commit or rollback is automatical, depending of success
+        try:
+            with con:
+                cur = con.cursor()
+                results = con.executescript(sql)
+                if results:
+                    message = f"```python\n{results}```"
+                    if len(message) > 2000:
+                        await ctx.send("Results too long",
+                        file=discord.File(io.BytesIO(fmt.encode('utf-8')),
+                        'results.txt'))
+                    else:
+                        await ctx.send(message)
+                else:
+                    await ctx.send('\N{SQUARED OK}')
+        except Exception as e:
+            await ctx.send(e)
 
 def setup(bot):
     bot.add_cog(Owner(bot))

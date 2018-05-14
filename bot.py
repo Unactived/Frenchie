@@ -1,4 +1,5 @@
 import sys
+import sqlite3
 
 #import asyncio
 import discord
