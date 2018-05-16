@@ -24,6 +24,8 @@ class Frenchie(commands.Bot):
         super().__init__(command_prefix=commands.when_mentioned_or(prefix),
         description=description, pm_help=None)
 
+        self.db_con = sqlite3.connect("database.db")
+
         for extension in extensions:
             try:
                 self.load_extension(extension)
@@ -39,6 +41,35 @@ class Frenchie(commands.Bot):
 
     async def on_resumed(self):
         print(f'\n[*] {self.user} resumed...')
+
+    async def on_guild_join(self, guild):
+        try:
+            with self.db_con:
+                self.db_con.execute(f"""INSERT OR IGNORE INTO guilds VALUES
+                    ({guild.id}, {guild.name}, 'fr!', '', '')
+                """)
+        except sqlite3.IntegrityError:
+            print(f"ERROR adding {guild.name} ({guild.id}) to database")
+
+    async def on_guild_update(self, guild):
+        try:
+            with self.db_con:
+                # We assume guild ID won't change
+                self.db_con.execute(f"""UPDATE guilds
+                    SET name = {guild.name} WHERE id = {guild.id}
+                """)
+                # Add relevant guild updates here
+        except sqlite3.IntegrityError:
+            print(f"ERROR updating {guild.name} ({guild.id}) in database")
+
+    async def on_guild_remove(self, guild):
+        try:
+            with self.db_con:
+                self.db_con.execute(f"""DELETE FROM guilds
+                    WHERE id = {guild.id}
+                """)
+        except sqlite3.IntegrityError:
+            print(f"ERROR removing {guild.name} ({guild.id}) from database")
 
     async def close(self):
         await super().close()
