@@ -51,12 +51,12 @@ class Frenchie(commands.Bot):
         except sqlite3.IntegrityError:
             print(f"ERROR adding {guild.name} ({guild.id}) to database")
 
-    async def on_guild_update(self, guild):
+    async def on_guild_update(self, before, after):
         try:
             with self.db_con:
                 # We assume guild ID won't change
                 self.db_con.execute(f"""UPDATE guilds
-                    SET name = {guild.name} WHERE id = {guild.id}
+                    SET name = {after.name} WHERE id = {guild.id}
                 """)
                 # Add relevant guild updates here
         except sqlite3.IntegrityError:
