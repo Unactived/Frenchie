@@ -46,7 +46,7 @@ class Frenchie(commands.Bot):
         try:
             with self.db_con:
                 self.db_con.execute(f"""INSERT OR IGNORE INTO guilds VALUES
-                    ({guild.id}, {guild.name}, 'fr!', '', '')
+                    ({guild.id}, {guild.name}, 'fr!', '', '', {guild.created_at}, 'EN')
                 """)
         except sqlite3.IntegrityError:
             print(f"ERROR adding {guild.name} ({guild.id}) to database")

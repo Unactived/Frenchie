@@ -147,5 +147,17 @@ class Owner:
         except Exception as e:
             await ctx.send(e)
 
+    @commands.command( hidden=True)
+    async def guildsUpdate(self, ctx):
+        """Exec some code, used a string instead of a file"""
+        for guild in self.bot.guilds:
+            try:
+                with self.db_con:
+                    self.db_con.execute(f"""INSERT OR IGNORE INTO guilds VALUES
+                        ({guild.id}, {guild.name}, 'fr!', '', '')
+                    """)
+            except sqlite3.IntegrityError:
+                print(f"ERROR adding {guild.name} ({guild.id}) to database")
+
 def setup(bot):
     bot.add_cog(Owner(bot))
