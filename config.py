@@ -3,8 +3,8 @@ BLUE = 0x99e6ff
 prefix = 'fr!'
 
 import os
-#parentdir = os.path.dirname(os.path.dirname(os.path.abspath("database.db")))
-#os.sys.path.insert(0, parentdir)
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath("database.db")))
+os.sys.path.insert(0, parentdir)
 
 try:
     # Development
