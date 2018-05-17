@@ -125,16 +125,13 @@ class Owner:
         }
         env.update(globals())
 
-        print(code)
         code = self._clean_code(code)
-        print(code)
         buffer = io.StringIO()
         #function placeholder
         to_compile = f'async def foo():\n{textwrap.indent(code, " ")}'
 
         try:
             exec(to_compile, env)
-            print("yay")
         except Exception as e:
             return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n``')
 
@@ -154,7 +151,7 @@ class Owner:
                 pass
 
             if ret is None:
-                if value:
+                if value is not None:
                     await ctx.send(f'```py\n{value}\n```')
                 else:
                     self._last_result = ret
