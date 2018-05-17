@@ -11,6 +11,7 @@ from checks import *
 class Owner:
     def __init__(self, bot):
         self.bot = bot
+        self.db_con = sqlite3.connect('database.db')
 
     # Owner check
     async def __local_check(self, ctx):
@@ -150,14 +151,16 @@ class Owner:
     @commands.command( hidden=True)
     async def guildsUpdate(self, ctx):
         """Exec some code, used a string instead of a file"""
+        # Should only be ran once
+        guilds = []
         for guild in self.bot.guilds:
-            try:
-                with self.db_con:
-                    self.db_con.execute(f"""INSERT OR IGNORE INTO guilds VALUES
-                        ({guild.id}, {guild.name}, 'fr!', '', '')
-                    """)
-            except sqlite3.IntegrityError:
-                print(f"ERROR adding {guild.name} ({guild.id}) to database")
+            guilds.append((guild.id, guild.name, 'fr!', '', '', guild.created_at, 'EN'))
+        try:
+            with self.db_con:
+                self.db_con.executemany("INSERT OR IGNORE INTO guilds VALUES (?,?,?,?,?,?,?)",
+                guilds)
+        except sqlite3.IntegrityError:
+            print(f"ERROR adding guilds to database")
 
 def setup(bot):
     bot.add_cog(Owner(bot))
