@@ -13,7 +13,7 @@ FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
 """
 
 extensions = (
-    'cogs.admin',
+    #'cogs.admin',
     'cogs.general',
     'cogs.music',
     'cogs.owner',
