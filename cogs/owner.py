@@ -29,12 +29,12 @@ class Owner:
     @commands.command(hidden=True)
     async def guildlist(self, ctx):
         """Displays all guilds the bot is on and their members amount"""
-        emb = discord.Embed(title="Frenchie's server list", color=BLUE)
-        if len(self.bot.guilds) > 10: range = 10
+        text = "**Frenchie's server list** :\n"
+        if len(self.bot.guilds) > 50: range = 50
         else: range = len(self.bot.guilds)
-        for guild in self.bot.guilds[:range-1]:
-            emb.add_field(name=guild.name, value=f"{guild.member_count} members")
-        await ctx.send(embed=emb)
+        for guild in self.bot.guilds[:range]:
+            text += f'**{guild.name}**, {guild.member_count} members\n'
+        await ctx.send(text)
 
     @commands.command(hidden=True)
     async def guildinfo(self, ctx, guild: str):
