@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import traceback
+from contextlib import redirect_stdout
+import textwrap
 import os
 import sys, io
 import sqlite3
@@ -12,6 +14,7 @@ class Owner:
     def __init__(self, bot):
         self.bot = bot
         self.db_con = sqlite3.connect('database.db')
+        self._last_eval_result = None
 
     # Owner check
     async def __local_check(self, ctx):
@@ -101,29 +104,63 @@ class Owner:
         """Makes the bot say something in a given current guild's channel"""
         await channel.send(text)
 
+    def _clean_code(self, code):
+        # Markdown py ; not python
+        if code.startswith('```') and code.endswith('```'):
+            return '\n'.join(code.split('\n')[1:-1])
+        return code.strip('`\n')
+
     @commands.is_owner()
     @commands.command(name='eval', hidden=True)
-    async def _eval(self, ctx, *, text: str):
+    async def _eval(self, ctx, *, code: str):
         """Eval some code"""
-        await ctx.send(f"```python\n{eval(text)}```")
 
-    @commands.is_owner()
-    @commands.command(name='exec', hidden=True)
-    async def _exec(self, ctx, *, text: str):
-        """Exec some code, used a string instead of a file"""
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'message': ctx.message,
+            '_': self._last_eval_result
+        }
+        env.update(globals())
 
-        old_stdout = sys.stdout
+        print(code)
+        code = self._clean_code(code)
+        print(code)
         buffer = io.StringIO()
-        sys.stdout = buffer
+        #function placeholder
+        to_compile = f'async def foo():\n{textwrap.indent(code, " ")}'
+
         try:
-            exec(text)
-            buffer.seek(0)
-            await ctx.send(f"```python\n{buffer.read()}```")
+            exec(to_compile, env)
+            print("yay")
         except Exception as e:
-            await ctx.send(f"```python\n{e}```")
-        finally:
-            sys.stdout = old_stdout
-            del buffer
+            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n``')
+
+        foo = env['foo']
+        try:
+            with redirect_stdout(buffer):
+                ret = await foo()
+        except Exception as e:
+            value = buffer.getvalue()
+            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+        else:
+            value = buffer.getvalue()
+            try:
+                await ctx.message.add_reaction('\N{INCOMING ENVELOPE}')
+            except:
+                #well...
+                pass
+
+            if ret is None:
+                if value:
+                    await ctx.send(f'```py\n{value}\n```')
+                else:
+                    self._last_result = ret
+                    await ctx.send(f'```py\n{value}{ret}\n```')
+
+        await ctx.send(f"```python\n{eval(text)}```")
 
     @commands.is_owner()
     @commands.command(name='sql', hidden=True)
@@ -149,7 +186,7 @@ class Owner:
             await ctx.send(e)
 
     @commands.command( hidden=True)
-    async def guildsUpdate(self, ctx):
+    async def guildsupdate(self, ctx):
         """Exec some code, used a string instead of a file"""
         # Should only be ran once
         guilds = []
