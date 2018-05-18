@@ -116,6 +116,7 @@ class Owner:
         """Eval some code"""
 
         env = {
+            'db_con': self.db_con,
             'bot': self.bot,
             'ctx': ctx,
             'channel': ctx.channel,
