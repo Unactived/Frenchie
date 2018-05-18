@@ -8,7 +8,8 @@ class Administration:
         self.bot = bot
 
     async def __local_check(self, ctx):
-        return is_admin(ctx.author)
+        # We're in a guild and with its owner
+        return ctx.guild is not None and ctx.author.id == ctx.guild.owner_id
 
     @commands.command()
     async def setup(self, ctx):
