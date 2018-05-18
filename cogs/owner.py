@@ -157,8 +157,6 @@ class Owner:
                     self._last_result = ret
                     await ctx.send(f'```py\n{value}{ret}\n```')
 
-        await ctx.send(f"```python\n{eval(text)}```")
-
     @commands.is_owner()
     @commands.command(name='sql', hidden=True)
     async def _sql(self, ctx, *, sql: str):
