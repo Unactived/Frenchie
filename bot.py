@@ -5,6 +5,7 @@ import sqlite3
 import discord
 from discord.ext import commands
 
+import utils
 from config import *
 
 description = """
@@ -19,9 +20,16 @@ extensions = (
     'cogs.owner',
 )
 
+def _prefix_callable(bot, message):
+    base = [f'<@!{bot.user.id}> ', f'<@{bot.user.id}> ']
+    if message.guild is None:
+        return base.append('fr!')
+    current = utils.get_guild_attr(message.guild, prefix)
+    return base.append(current)
+
 class Frenchie(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=commands.when_mentioned_or(prefix),
+        super().__init__(command_prefix=_prefix_callable,
         description=description, pm_help=None)
 
         self.db_con = sqlite3.connect("database.db")

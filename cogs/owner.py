@@ -187,7 +187,7 @@ class Owner:
         # Should only be ran once
         guilds = []
         for guild in self.bot.guilds:
-            guilds.append((guild.id, guild.name, 'fr!', '', '', guild.created_at, 'EN'))
+            guilds.append((guild.id, guild.name, 'fr!', '', '', guild.created_at, 'us'))
         try:
             with self.db_con:
                 self.db_con.executemany("INSERT OR IGNORE INTO guilds VALUES (?,?,?,?,?,?,?)",
