@@ -54,9 +54,9 @@ class Frenchie(commands.Bot):
     async def on_guild_join(self, guild):
         try:
             with self.db_con:
-                self.db_con.execute(f"""INSERT OR IGNORE INTO guilds VALUES
-                    (:guild.id, :guild.name, 'fr!', '', '', :guild.created_at, 'us')
-                """)
+                self.db_con.execute("""INSERT OR IGNORE INTO guilds VALUES
+                    (?, ?, 'fr!', '', '', ?, 'us')
+                """, (guild.id, guild.name, str(guild.created_at)))
         except sqlite3.IntegrityError:
             print(f"ERROR adding {guild.name} ({guild.id}) to database")
 
@@ -64,9 +64,9 @@ class Frenchie(commands.Bot):
         try:
             with self.db_con:
                 # We assume guild ID won't change
-                self.db_con.execute(f"""UPDATE guilds
-                    SET name = {after.name} WHERE id = {before.id}
-                """)
+                self.db_con.execute("""UPDATE guilds
+                    SET name=? WHERE id=?
+                """, (after.name, before.id))
                 # Add relevant guild updates here
         except sqlite3.IntegrityError:
             print(f"ERROR updating {guild.name} ({guild.id}) in database")
@@ -74,9 +74,9 @@ class Frenchie(commands.Bot):
     async def on_guild_remove(self, guild):
         try:
             with self.db_con:
-                self.db_con.execute(f"""DELETE FROM guilds
-                    WHERE id = {guild.id}
-                """)
+                self.db_con.execute("""DELETE FROM guilds
+                    WHERE id=?
+                """, (guild.id))
         except sqlite3.IntegrityError:
             print(f"ERROR removing {guild.name} ({guild.id}) from database")
 
