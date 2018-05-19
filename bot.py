@@ -24,8 +24,9 @@ def _prefix_callable(bot, message):
     base = [f'<@!{bot.user.id}> ', f'<@{bot.user.id}> ']
     if message.guild is None:
         return base.append('fr!')
-    current = utils.get_guild_attr(message.guild, prefix)
-    return base.append(current)
+    current = utils.get_guild_attr(message.guild, 'prefix')
+    base.append(current)
+    return base
 
 class Frenchie(commands.Bot):
     def __init__(self):
