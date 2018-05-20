@@ -30,7 +30,7 @@ def _prefix_callable(bot, message):
 
 class Frenchie(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=_prefix_callable,
+        super().__init__(command_prefix=commands.when_mentioned_or('fr!'),
         description=description, pm_help=None)
 
         self.db_con = sqlite3.connect("database.db")
