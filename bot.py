@@ -14,10 +14,11 @@ FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
 """
 
 extensions = (
+    'cogs.owner',
     'cogs.admin',
     'cogs.general',
     'cogs.music',
-    'cogs.owner',
+    'cogs.internet',
 )
 
 def _prefix_callable(bot, message):
