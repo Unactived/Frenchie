@@ -24,8 +24,9 @@ class Internet:
             emb.set_footer(text="Powered by StackExchange API")
 
             for q in qs:
-                q = so.question(q.id) # Fetch question's data
-                emb.add_field(name=f"[{q.title}](https://stackoverflow.com/q/{q.id})", value=f"`{len(q.answers)} answers` Score : {q.score}")
+                q = so.question(q.id, filter="!b00fMwwD.s*79x") # Fetch question's data, include vote_counts
+                emb.add_field(name=f'[{q.title}](https://stackoverflow.com/q/{q.id} "{q.up_vote_count}👍 | {q.down_vote_count}👎")',
+                value=f"`{len(q.answers)} answers` Score : {q.score}")
 
             await ctx.send(embed=emb)
 
