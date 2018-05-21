@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp, urllib.parse
 from datetime import datetime
+import random
 
 import stackexchange as se
 
@@ -169,6 +170,13 @@ class Internet:
                         await ctx.send(embed=emb)
                     else:
                         await ctx.send(f"An error occurred, code : {response.status}. Check your arguments.")
+
+    @commands.command()
+    async def xkcd(self, ctx, number=None):
+        """Sends a given or random xkcd comics"""
+        if number is None:
+            number = random.randint(0, 1996)
+        await ctx.send(f"https://xkcd.com/{number}")
 
 def setup(bot):
     bot.add_cog(Internet(bot))
