@@ -116,7 +116,7 @@ class Internet:
                         donnees = await response.json()
                         content = ""
                         if donnees['Result']:
-                            content += f'```{donnees["Result"]}```'
+                            content += f'```placeholder\n{donnees["Result"]}```'
                         if donnees['Warnings']:
                             content += f'```fix\n{donnees["Warnings"]}```'
                         if donnees['Errors']:
