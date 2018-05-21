@@ -76,7 +76,8 @@ class Internet:
             for q in qs:
                 q = so.question(q.id, filter="!b1MME4lS1P-8fK") # Fetch question's data, include vote_counts and answers
                 emb.add_field(name=f"`{len(q.answers)} answers` Score : {q.score}",
-                value=f'[{q.title}](https://stackoverflow.com/q/{q.id} "{q.up_vote_count}🔺|{q.down_vote_count}🔻")')
+                value=f'[{q.title}](https://stackoverflow.com/q/{q.id} "{q.up_vote_count}🔺|{q.down_vote_count}🔻")',
+                inline=False)
             await ctx.send(embed=emb)
 
         else:
