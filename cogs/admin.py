@@ -11,7 +11,7 @@ class Administration:
         # We're in a guild and with its owner
         return ctx.guild is not None and ctx.author.id == ctx.guild.owner_id
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def setup(self, ctx):
         """Sets guild's prefix and welcome/goodbye messages"""
         await ctx.send('Thanks for inviting me *and running this command*\

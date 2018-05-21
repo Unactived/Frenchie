@@ -11,7 +11,7 @@ class Internet:
 
     @commands.command(aliases=['so'])
     async def stackoverflow(self, ctx, *, text: str):
-        """Querys StackOverflow and gives you top result"""
+        """Queries StackOverflow and gives you top results"""
 
         so = se.Site(se.StackOverflow, SE_KEY)
         so.impose_throttling = True
@@ -24,7 +24,7 @@ class Internet:
             emb.set_footer(text="Hover for vote stats")
 
             for q in qs:
-                q = so.question(q.id, filter="!b1MME4lS1P-8fK") # Fetch question's data, include vote_counts
+                q = so.question(q.id, filter="!b1MME4lS1P-8fK") # Fetch question's data, include vote_counts and answers
                 emb.add_field(name=f"`{len(q.answers)} answers` Score : {q.score}",
                 value=f'[{q.title}](https://stackoverflow.com/q/{q.id} "{q.up_vote_count}🔺|{q.down_vote_count}🔻")')
             await ctx.send(embed=emb)
