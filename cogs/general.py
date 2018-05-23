@@ -1,10 +1,11 @@
-#import asyncio
 import discord
 from discord.ext import commands
 import urllib.parse
 
-from config import *
-from checks import *
+# from checks import *
+
+BLUE = 0x99e6ff
+
 
 class General:
     def __init__(self, bot):
@@ -14,8 +15,11 @@ class General:
     async def info(self, ctx):
         """Some info about the bot, including an invite link"""
 
-        description = """FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
-it's French, and still in development)"""
+        description = """FrenchMasterSword's bot, provides some cool utilities (just to be sure,
+ it's French, and still in development)"""
+
+        invite_url = 'https://discordapp.com/oauth2/authorize?client '
+        'id=438242027541495808&scope=bot&permissions=1194839233'
 
         embed = discord.Embed(title="Frenchie", description=description, color=BLUE)
 
@@ -37,8 +41,13 @@ it's French, and still in development)"""
     @commands.command(aliases=['source'])
     async def sourcecode(self, ctx):
         """Grants you access to a horrible code which strikes you blind"""
-        emb = discord.Embed(title="Frenchie", description="Legend tells that if you\
- do not star this repository, you finish eaten by a baguette", color=BLUE)
+
+        source_url = 'https://github.com/FrenchMasterSword/Frenchie'
+
+        emb = discord.Embed(title="Frenchie",
+                            description="Legend tells that if you"
+                            "do not star this repository, you finish eaten by a baguette",
+                            color=BLUE)
         emb.add_field(name="Beware", value=f'[Source code (Github)]({source_url} "⭐?")')
         emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
 
@@ -47,8 +56,10 @@ it's French, and still in development)"""
     @commands.command()
     async def runlist(self, ctx):
         """Supported languages by the run command"""
-        emb = discord.Embed(title="List of supported languages by run command",\
-        description="An exhaustive list is available [here](https://hastebin.com/pojukacafa.vbs)", color=BLUE)
+        emb = discord.Embed(title="List of supported languages by run command",
+                            description="An exhaustive list is available "
+                            "[here](https://hastebin.com/pojukacafa.vbs)",
+                            color=BLUE)
 
         await ctx.send(embed=emb)
 
@@ -57,7 +68,7 @@ it's French, and still in development)"""
         """Searches on the given website"""
         if ctx.invoked_subcommand is None:
 
-            await ctx.send(f'Usage : `{prefix}ask <site> "Arguments"`')
+            await ctx.send(f'Usage : `fr!ask <site> "Arguments"`')
 
     @commands.command()
     async def lmgtfy(self, ctx, *, text: str):
@@ -68,6 +79,7 @@ it's French, and still in development)"""
         emb = discord.Embed(title="How it works", description=f"[{text}]({url})", color=BLUE)
 
         await ctx.send(embed=emb)
+
 
 def setup(bot):
     bot.add_cog(General(bot))

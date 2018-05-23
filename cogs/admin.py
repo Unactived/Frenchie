@@ -1,7 +1,8 @@
-import discord
+# import discord
 from discord.ext import commands
 
-from checks import *
+# from checks import *
+
 
 class Administration:
     def __init__(self, bot):
@@ -14,8 +15,9 @@ class Administration:
     @commands.command(hidden=True)
     async def setup(self, ctx):
         """Sets guild's prefix and welcome/goodbye messages"""
-        await ctx.send('Thanks for inviting me *and running this command*\
-:blush:\nCurrent prefix is {self.prefix}')
+        await ctx.send('Thanks for inviting me *and running this command*'
+                       ':blush:\nCurrent prefix is {self.prefix}')
+
 
 def setup(bot):
     bot.add_cog(Administration(bot))

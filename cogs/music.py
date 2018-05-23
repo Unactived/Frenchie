@@ -1,10 +1,11 @@
-import os
+# import os
+import asyncio
 import discord
 from discord.ext import commands
 
 import youtube_dl
 
-from checks import *
+# from checks import *
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -19,7 +20,7 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 
 ffmpeg_options = {
@@ -28,6 +29,7 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -133,6 +135,7 @@ class Music:
                 raise commands.CommandError("Author not connected to a voice channel.")
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
+
 
 def setup(bot):
     bot.add_cog(Music(bot))

@@ -1,16 +1,13 @@
 import sys
 import sqlite3
 
-#import asyncio
 import discord
 from discord.ext import commands
 
 import utils
-from config import *
 
-description = """
-FrenchMasterSword's bot, provides some cool utilities (just to be sure,\
- it's French, and still in development)
+description = """ FrenchMasterSword's bot, provides some cool utilities (just
+ to be sure, it's French, and still in development
 """
 
 extensions = (
@@ -21,6 +18,10 @@ extensions = (
     'cogs.internet',
 )
 
+FRENCHIE_GUILD_ID = 415618372118773792
+FRENCHIE_GUILD_LOGS_ID = 448187949163610112
+
+
 def _prefix_callable(bot, message):
     base = [f'<@!{bot.user.id}> ', f'<@{bot.user.id}> ']
     if message.guild is None:
@@ -29,10 +30,11 @@ def _prefix_callable(bot, message):
     base.append(current)
     return base
 
+
 class Frenchie(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or('fr!'),
-        description=description, pm_help=None)
+                         description=description, pm_help=None)
 
         self.db_con = sqlite3.connect("database.db")
 
@@ -40,14 +42,14 @@ class Frenchie(commands.Bot):
             try:
                 self.load_extension(extension)
             except Exception as e:
-                #print in error stream
+                # print in error stream
                 print(f"Couldn't load the following extension : {extension} ; :{e}", file=sys.stderr)
 
     async def on_ready(self):
         print(f'Logged in as {self.user.name} ; ID : {self.user.id}')
         print('-----------------------------------------------\n')
         await self.change_presence(status=3,
-        activity=discord.Game(name=f'{prefix}info | {prefix}help'))
+                                   activity=discord.Game(name=f'fr!info | fr!help'))
 
     async def on_resumed(self):
         print(f'\n[*] {self.user} resumed...')
@@ -70,7 +72,7 @@ class Frenchie(commands.Bot):
                 """, (after.name, before.id))
                 # Add relevant guild updates here
         except sqlite3.IntegrityError:
-            print(f"ERROR updating {guild.name} ({guild.id}) in database")
+            print(f"ERROR updating {before.name} ({before.id}) in database")
 
     async def on_guild_remove(self, guild):
         try:
