@@ -4,12 +4,11 @@ import urllib.parse
 
 # from checks import *
 
-BLUE = 0x99e6ff
-
 
 class General:
     def __init__(self, bot):
         self.bot = bot
+        self.BLUE = 0x99e6ff
 
     @commands.command()
     async def info(self, ctx):
@@ -21,7 +20,7 @@ class General:
         invite_url = 'https://discordapp.com/oauth2/authorize?client '
         'id=438242027541495808&scope=bot&permissions=1194839233'
 
-        embed = discord.Embed(title="Frenchie", description=description, color=BLUE)
+        embed = discord.Embed(title="Frenchie", description=description, color=self.BLUE)
 
         embed.add_field(name="Author", value="FrenchMasterSword#9035")
         embed.add_field(name="Server count", value=f"{len(self.bot.guilds)}")
@@ -47,7 +46,7 @@ class General:
         emb = discord.Embed(title="Frenchie",
                             description="Legend tells that if you"
                             "do not star this repository, you finish eaten by a baguette",
-                            color=BLUE)
+                            color=self.BLUE)
         emb.add_field(name="Beware", value=f'[Source code (Github)]({source_url} "⭐?")')
         emb.set_footer(text="If you find this bot useful, don't forget the ⭐ ^^")
 
@@ -59,7 +58,7 @@ class General:
         emb = discord.Embed(title="List of supported languages by run command",
                             description="An exhaustive list is available "
                             "[here](https://hastebin.com/pojukacafa.vbs)",
-                            color=BLUE)
+                            color=self.BLUE)
 
         await ctx.send(embed=emb)
 
@@ -76,7 +75,7 @@ class General:
 
         url = f"http://lmgtfy.com/?q={text}"
         url = urllib.parse.quote_plus(url, safe=';/?:@&=$,><-[]')
-        emb = discord.Embed(title="How it works", description=f"[{text}]({url})", color=BLUE)
+        emb = discord.Embed(title="How it works", description=f"[{text}]({url})", color=self.BLUE)
 
         await ctx.send(embed=emb)
 

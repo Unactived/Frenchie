@@ -182,8 +182,7 @@ class Internet:
         weather_url = ('http://api.openweathermap.org/data/2.5/weather?q={}'
                        + f'&appid={self.WEATHER_KEY}&units=metric')
 
-        earth_url = "https://emojipedia-us.s3.amazonaws.com/thumbs/320/twitter"
-        "/134/earth-globe-europe-africa_1f30d.png"
+        earth_url = "https://emojipedia-us.s3.amazonaws.com/thumbs/320/twitter/134/earth-globe-europe-africa_1f30d.png"
 
         async with ctx.typing():
             async with aiohttp.ClientSession() as client_session:
@@ -202,7 +201,7 @@ class Internet:
                         countryFlag = f':flag_{data["sys"]["country"].lower()}:'
 
                         emb = discord.Embed(title=f"Current weather at {city} {countryFlag} "
-                                            f": {data['weather'][0]['description']}", color=BLUE)
+                                            f": {data['weather'][0]['description']}")
                         emb.set_thumbnail(url=earth_url)
                         emb.add_field(name=":thermometer: Temperature", value=f"{temperature} °C")
                         emb.add_field(name=":dash: Wind speed", value=f"{windSpeed} m/s")
