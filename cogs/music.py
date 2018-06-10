@@ -78,6 +78,7 @@ class Music:
 
         await ctx.send('Now playing: {}'.format(player.title))
 
+    @commands.is_owner()
     @commands.command()
     async def play(self, ctx, *, url):
         """Streams from a url (same as yt, but doesn't predownload)"""
@@ -99,6 +100,7 @@ class Music:
         ctx.voice_client.source.volume = volume
         await ctx.send("Changed volume to {}%".format(volume))
 
+    @commands.is_owner()
     @commands.command()
     async def pause(self, ctx):
         "Pauses the player"
@@ -108,6 +110,7 @@ class Music:
 
         await ctx.send("Music paused")
 
+    @commands.is_owner()
     @commands.command()
     async def resume(self, ctx):
         "Resumes the paused player"
@@ -117,6 +120,7 @@ class Music:
 
         await ctx.send("Resuming music")
 
+    @commands.is_owner()
     @commands.command()
     async def stop(self, ctx):
         """Stops and disconnects the bot from voice"""

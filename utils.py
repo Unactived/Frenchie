@@ -1,6 +1,7 @@
-import discord
-from discord.ext import commands
+# import discord
+# from discord.ext import commands
 import sqlite3
+
 
 def get_guild_attr(guild, attr):
     attrList = ['id', 'name', 'prefix', 'msg_join', 'msg_leave', 'creation', 'lang']

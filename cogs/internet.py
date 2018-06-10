@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import urllib.parse
+import bs4
 import json
 from datetime import datetime
 import random
@@ -20,52 +21,54 @@ class Internet:
         self.SE_KEY = configDict['SE_KEY']
 
     @commands.command(hidden=True)
-    async def cpp(self, ctx, *, query: str):
+    async def cpp(self, ctx, *, text: str):
         """Search something on cppreference"""
 
-        url = 'http://en.cppreference.com/w/cpp/index.php'
-        params = {
-            'title': 'Special:Search',
-            'search': query
-        }
+        base_url = 'https://cppreference.com/w/cpp/index.php?title=Special:Search'
+        base_url += '&search=' + text
+        url = urllib.parse.quote_plus(base_url, safe=';/?:@&=$,><-[]')
 
-        async with ctx.session.get(url, params=params) as resp:
-            if resp.status != 200:
-                return await ctx.send('An error occurred (status code: {resp.status}). Retry later.')
+        async with ctx.typing():
+            async with aiohttp.ClientSession() as client_session:
+                async with client_session.get(url) as response:
+                    if response.status != 200:
+                        return await ctx.send('An error occurred (status code: {response.status}). Retry later.')
 
-            if len(resp.history) > 0:
-                return await ctx.send(resp.url)
+                    # if len(response.history) > 0:
+                    #     return await ctx.send(response.url)
 
-            e = discord.Embed()
-            root = etree.fromstring(await resp.text(), etree.HTMLParser())
+                    emb = discord.Embed(title="C++ docs")
+                    soup = bs4.BeautifulSoup(str(response.text), 'lxml')
 
-            nodes = root.findall(".//div[@class='mw-search-result-heading']/a")
+                    nodes = soup.find_all(".//div[@class='mw-search-result-heading']/a")
+                    print(nodes)
 
-            description = []
-            special_pages = []
-            for node in nodes:
-                href = node.attrib['href']
-                if not href.startswith('/w/cpp'):
-                    continue
+                    description = []
+                    special_pages = []
+                    for node in nodes:
+                        href = node.get('href')
+                        print(href)
+                        if not href.startswith('/w/cpp'):
+                            # C
+                            continue
 
-                if href.startswith(('/w/cpp/language', '/w/cpp/concept')):
-                    # special page
-                    special_pages.append(f'[{node.text}](http://en.cppreference.com{href})')
-                else:
-                    description.append(f'[`{node.text}`](http://en.cppreference.com{href})')
+                        if href.startswith(('/w/cpp/language', '/w/cpp/concept')):
+                            # special page
+                            special_pages.append(f'[{node.next}](http://en.cppreference.com{href})')
+                        else:
+                            description.append(f'[`{node.next}`](http://en.cppreference.com{href})')
 
-            if len(special_pages) > 0:
-                e.add_field(name='Language Results', value='\n'.join(special_pages), inline=False)
-                if len(description):
-                    e.add_field(name='Library Results', value='\n'.join(description[:10]), inline=False)
-            else:
-                if not len(description):
-                    return await ctx.send('No results found.')
+                    if len(special_pages):
+                        emb.add_field(name='Language Results', value='\n'.join(special_pages), inline=False)
+                    if len(description):
+                        emb.add_field(name='Library Results', value='\n'.join(description[:10]), inline=False)
+                    else:
+                        if not len(description):
+                            return await ctx.send('No results found.')
 
-                e.title = 'Search Results'
-                e.description = '\n'.join(description[:15])
+                    emb.description = '\n'.join(description[:15])
 
-            await ctx.send(embed=e)
+                    await ctx.send(embed=emb)
 
     @commands.command(aliases=['so'])
     async def stackoverflow(self, ctx, *, text: str):
