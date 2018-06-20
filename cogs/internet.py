@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import urllib.parse
-import bs4
+# import bs4
 import json
 from datetime import datetime
 import random
